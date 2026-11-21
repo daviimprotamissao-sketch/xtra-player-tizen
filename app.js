@@ -63,4 +63,17 @@ document.querySelectorAll("[data-view]").forEach(function(b){b.addEventListener(
 document.addEventListener("keydown",function(e){var k=e.keyCode||e.which;if($("player-screen")&&!$("player-screen").classList.contains("hidden")){if(k===10009||k===27||e.key==="Escape"){e.preventDefault();stopPlayer();}else if(k===13||k===19){e.preventDefault();XtraPlayerEngine.pause();}else if(k===37){try{XtraPlayerEngine.seek(-10);}catch(x){}}else if(k===39){try{XtraPlayerEngine.seek(10);}catch(x){}}return;}if(k===10009||k===27||e.key==="Escape"){if(!$("playlist-modal").classList.contains("hidden"))closePlaylistModal();else if(!$("details-modal").classList.contains("hidden"))$("details-modal").classList.add("hidden");else if(S.view!=="home")showView("home");return;}if([37,38,39,40].indexOf(k)>=0&&document.activeElement&&["INPUT","SELECT","TEXTAREA"].indexOf(document.activeElement.tagName)<0){var cur=document.activeElement,cr=cur.getBoundingClientRect(),cx=cr.left+cr.width/2,cy=cr.top+cr.height/2;var candidates=Array.prototype.slice.call(document.querySelectorAll("button:not(:disabled),input:not(:disabled),select:not(:disabled),[tabindex='0']")).filter(function(el){return el!==cur&&el.offsetParent!==null;});var best=null,score=Infinity;candidates.forEach(function(el){var r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,dx=x-cx,dy=y-cy,forward=(k===37?-dx:k===39?dx:k===38?-dy:dy);if(forward<=8)return;var cross=(k===37||k===39)?Math.abs(dy):Math.abs(dx),s=forward+cross*2;if(s<score){score=s;best=el;}});if(best){e.preventDefault();best.focus();}}});
 try{if(window.tizen&&tizen.tvinputdevice){tizen.tvinputdevice.registerKeyBatch(["MediaPlayPause","MediaFastForward","MediaRewind","ChannelUp","ChannelDown"]);}}catch(e){}
 showView("home");
+// A tela de autenticação é a primeira tela visível; coloque foco no campo de e-mail.
+function focusAuth(){if(!$("auth-screen").classList.contains("hidden"))$("auth-email").focus();}
+focusAuth();
+document.addEventListener("keydown",function(e){
+ if($("auth-screen").classList.contains("hidden"))return;
+ var k=e.keyCode||e.which,ids=["auth-email","auth-password","auth-submit","auth-toggle"];
+ if(k!==38&&k!==40)return;
+ var idx=ids.indexOf(document.activeElement&&document.activeElement.id);
+ if(idx<0)idx=0;
+ var next=idx+(k===40?1:-1);
+ if(next<0)next=0;if(next>=ids.length)next=ids.length-1;
+ e.preventDefault();$(ids[next]).focus();
+},true);
 })();
