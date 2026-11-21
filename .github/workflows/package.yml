@@ -1,4 +1,4 @@
-name: Validate Tizen app
+name: Validate xTra Player Tizen
 on:
   push:
     branches: [ main ]
@@ -10,18 +10,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate required project files
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Validate required files
         run: |
           test -f config.xml
           test -f index.html
           test -f styles.css
           test -f app.js
-      - name: Check JavaScript syntax
-        run: node --check app.js
-      - name: Create source package (not a signed WGT)
+          test -f firebase.js
+          test -f player.js
+      - name: Validate JavaScript syntax
+        run: |
+          node --check app.js
+          node --check firebase.js
+          node --check player.js
+      - name: Validate Tizen manifest XML
+        run: python3 -c "import xml.etree.ElementTree as ET; ET.parse('config.xml'); print('config.xml OK')"
+      - name: Create source archive (not a signed WGT)
         run: |
           mkdir -p dist
-          zip -r dist/xtra-player-tizen-source.zip config.xml index.html styles.css app.js README.md
+          zip -r dist/xtra-player-tizen-source.zip config.xml index.html styles.css app.js firebase.js player.js README.md
       - uses: actions/upload-artifact@v4
         with:
           name: xtra-player-tizen-source
