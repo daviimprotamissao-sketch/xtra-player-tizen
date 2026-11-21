@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>xTra Player</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">x</span><span>xTra Player</span></div>
+      <nav id="main-nav" aria-label="Navegação principal">
+        <button class="nav-item focused" data-view="home">Início</button>
+        <button class="nav-item" data-view="live">TV ao vivo</button>
+        <button class="nav-item" data-view="movies">Filmes</button>
+        <button class="nav-item" data-view="series">Séries</button>
+        <button class="nav-item" data-view="playlists">Playlists</button>
+        <button class="nav-item" data-view="settings">Configurações</button>
+      </nav>
+      <div class="sidebar-foot">PLAYER PARA SAMSUNG TV</div>
+    </aside>
+    <main class="main-content">
+      <header class="topbar">
+        <div><p class="eyebrow">SEU ENTRETENIMENTO</p><h1 id="page-title">Início</h1></div>
+        <div class="status" id="connection-status">Pronto para conectar</div>
+      </header>
+      <section id="view-home" class="view active">
+        <div class="hero">
+          <div class="hero-copy"><p class="eyebrow">BEM-VINDO AO</p><h2>xTra Player</h2><p>Seus canais, filmes e séries em um só lugar.</p><button class="primary focusable" data-action="open-playlists">Adicionar playlist</button></div>
+        </div>
+        <div class="section-heading"><h2>Biblioteca</h2><span>Escolha uma seção</span></div>
+        <div class="tile-grid">
+          <button class="tile focusable" data-view="live"><span>◉</span><strong>TV ao vivo</strong><small>Seus canais</small></button>
+          <button class="tile focusable" data-view="movies"><span>▣</span><strong>Filmes</strong><small>Seus filmes</small></button>
+          <button class="tile focusable" data-view="series"><span>▤</span><strong>Séries</strong><small>Temporadas e episódios</small></button>
+        </div>
+      </section>
+      <section id="view-live" class="view"><div class="section-heading"><h2>Canais</h2><span id="live-count">0 canais</span></div><div id="live-list" class="media-grid empty-state">Adicione uma playlist M3U para carregar seus canais.</div></section>
+      <section id="view-movies" class="view"><div class="section-heading"><h2>Filmes</h2><span id="movie-count">0 filmes</span></div><div id="movie-list" class="media-grid empty-state">Os filmes serão exibidos aqui, separados dos canais.</div></section>
+      <section id="view-series" class="view"><div class="section-heading"><h2>Séries</h2><span id="series-count">0 séries</span></div><div id="series-list" class="media-grid empty-state">As séries serão exibidas aqui, separadas dos canais.</div></section>
+      <section id="view-playlists" class="view">
+        <div class="section-heading"><h2>Suas playlists</h2><span>Gerencie suas fontes</span></div>
+        <form id="playlist-form" class="playlist-form">
+          <label for="playlist-name">Nome da playlist</label><input id="playlist-name" required placeholder="Minha playlist">
+          <label for="playlist-url">URL da playlist M3U</label><input id="playlist-url" type="url" required placeholder="https://servidor/playlist.m3u">
+          <button class="primary focusable" type="submit">Adicionar playlist</button>
+        </form>
+        <div id="playlist-list" class="playlist-list empty-state">Nenhuma playlist adicionada.</div>
+      </section>
+      <section id="view-settings" class="view"><div class="section-heading"><h2>Configurações</h2></div><p class="muted">Configurações do aplicativo serão adicionadas nas próximas etapas.</p></section>
+      <div id="toast" role="status" aria-live="polite"></div>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
