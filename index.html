@@ -1,58 +1,63 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>xTra Player</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' https: data: blob:; connect-src 'self' https: http: ws: wss:; media-src 'self' https: http: blob:;">
+<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>xTra Player</title>
+<link rel="stylesheet" href="styles.css">
+<script src="$WEBAPIS/webapis/webapis.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<script src="firebase.js"></script><script src="player.js"></script>
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="sidebar">
-      <div class="brand"><span class="brand-mark">x</span><span>xTra Player</span></div>
-      <nav id="main-nav" aria-label="Navegação principal">
-        <button class="nav-item focused" data-view="home">Início</button>
-        <button class="nav-item" data-view="live">TV ao vivo</button>
-        <button class="nav-item" data-view="movies">Filmes</button>
-        <button class="nav-item" data-view="series">Séries</button>
-        <button class="nav-item" data-view="playlists">Playlists</button>
-        <button class="nav-item" data-view="settings">Configurações</button>
-      </nav>
-      <div class="sidebar-foot">PLAYER PARA SAMSUNG TV</div>
-    </aside>
-    <main class="main-content">
-      <header class="topbar">
-        <div><p class="eyebrow">SEU ENTRETENIMENTO</p><h1 id="page-title">Início</h1></div>
-        <div class="status" id="connection-status">Pronto para conectar</div>
-      </header>
-      <section id="view-home" class="view active">
-        <div class="hero">
-          <div class="hero-copy"><p class="eyebrow">BEM-VINDO AO</p><h2>xTra Player</h2><p>Seus canais, filmes e séries em um só lugar.</p><button class="primary focusable" data-action="open-playlists">Adicionar playlist</button></div>
-        </div>
-        <div class="section-heading"><h2>Biblioteca</h2><span>Escolha uma seção</span></div>
-        <div class="tile-grid">
-          <button class="tile focusable" data-view="live"><span>◉</span><strong>TV ao vivo</strong><small>Seus canais</small></button>
-          <button class="tile focusable" data-view="movies"><span>▣</span><strong>Filmes</strong><small>Seus filmes</small></button>
-          <button class="tile focusable" data-view="series"><span>▤</span><strong>Séries</strong><small>Temporadas e episódios</small></button>
-        </div>
-      </section>
-      <section id="view-live" class="view"><div class="section-heading"><h2>Canais</h2><span id="live-count">0 canais</span></div><div id="live-list" class="media-grid empty-state">Adicione uma playlist M3U para carregar seus canais.</div></section>
-      <section id="view-movies" class="view"><div class="section-heading"><h2>Filmes</h2><span id="movie-count">0 filmes</span></div><div id="movie-list" class="media-grid empty-state">Os filmes serão exibidos aqui, separados dos canais.</div></section>
-      <section id="view-series" class="view"><div class="section-heading"><h2>Séries</h2><span id="series-count">0 séries</span></div><div id="series-list" class="media-grid empty-state">As séries serão exibidas aqui, separadas dos canais.</div></section>
-      <section id="view-playlists" class="view">
-        <div class="section-heading"><h2>Suas playlists</h2><span>Gerencie suas fontes</span></div>
-        <form id="playlist-form" class="playlist-form">
-          <label for="playlist-name">Nome da playlist</label><input id="playlist-name" required placeholder="Minha playlist">
-          <label for="playlist-url">URL da playlist M3U</label><input id="playlist-url" type="url" required placeholder="https://servidor/playlist.m3u">
-          <button class="primary focusable" type="submit">Adicionar playlist</button>
-        </form>
-        <div id="playlist-list" class="playlist-list empty-state">Nenhuma playlist adicionada.</div>
-      </section>
-      <section id="view-settings" class="view"><div class="section-heading"><h2>Configurações</h2></div><p class="muted">Configurações do aplicativo serão adicionadas nas próximas etapas.</p></section>
-      <div id="toast" role="status" aria-live="polite"></div>
-    </main>
-  </div>
-  <script src="app.js"></script>
-</body>
-</html>
+<section id="auth-screen" class="auth-screen">
+ <div class="auth-card"><div class="brand"><span class="brand-mark">x</span><span>xTra Player</span></div>
+ <p class="eyebrow">SUA TV. SEU CONTEÚDO.</p><h1 id="auth-title">Entrar na sua conta</h1>
+ <form id="auth-form"><label>E-mail</label><input id="auth-email" type="email" autocomplete="username" required placeholder="voce@email.com"><label>Senha</label><input id="auth-password" type="password" autocomplete="current-password" required minlength="6" placeholder="Mínimo de 6 caracteres"><button class="primary focusable" id="auth-submit">Entrar</button></form>
+ <button id="auth-toggle" class="link-button focusable">Criar uma conta</button><p id="auth-error" class="error"></p>
+ </div>
+</section>
+<div id="app-shell" class="app-shell hidden">
+<aside class="sidebar">
+ <div class="brand"><span class="brand-mark">x</span><span>xTra Player</span></div>
+ <nav id="main-nav">
+  <button class="nav-item focused" data-view="home">⌂　Início</button>
+  <button class="nav-item" data-view="live">◉　TV ao vivo</button>
+  <button class="nav-item" data-view="movies">▣　Filmes</button>
+  <button class="nav-item" data-view="series">▤　Séries</button>
+  <button class="nav-item" data-view="favorites">☆　Favoritos</button>
+  <button class="nav-item" data-view="history">◷　Continuar assistindo</button>
+  <button class="nav-item" data-view="playlists">☷　Playlists</button>
+  <button class="nav-item" data-view="settings">⚙　Configurações</button>
+ </nav><div class="sidebar-foot">xTRA SOLUÇÕES</div>
+</aside>
+<main class="main-content">
+ <header class="topbar"><div><p class="eyebrow">SEU ENTRETENIMENTO</p><h1 id="page-title">Início</h1></div><div class="top-actions"><span id="connection-status">Conectado</span><span id="profile-label"></span></div></header>
+ <section id="view-home" class="view active">
+  <div class="hero"><div class="hero-copy"><p class="eyebrow">BEM-VINDO AO</p><h2>xTra Player</h2><p>Seus canais, filmes e séries em um só lugar.</p><button class="primary focusable" data-action="open-playlists">Adicionar playlist</button></div></div>
+  <div class="section-heading"><h2>Biblioteca</h2><span>Escolha uma seção</span></div><div class="tile-grid">
+   <button class="tile focusable" data-view="live"><span>◉</span><strong>TV ao vivo</strong><small id="home-live-count">Seus canais</small></button>
+   <button class="tile focusable" data-view="movies"><span>▣</span><strong>Filmes</strong><small id="home-movie-count">Sua coleção</small></button>
+   <button class="tile focusable" data-view="series"><span>▤</span><strong>Séries</strong><small id="home-series-count">Temporadas e episódios</small></button>
+  </div><div class="section-heading"><h2>Continue assistindo</h2></div><div id="home-history" class="media-grid empty-state">Seu histórico aparecerá aqui.</div>
+ </section>
+ <section id="view-live" class="view"><div class="section-heading"><h2>Canais</h2><span id="live-count">0 canais</span></div><div class="toolbar"><input id="live-search" placeholder="Buscar canal..." class="search-input"><select id="live-category" class="search-input"><option value="">Todas as categorias</option></select></div><div id="live-list" class="channel-layout"><div id="live-groups" class="group-list"></div><div id="live-items" class="media-grid empty-state">Adicione uma playlist.</div></div></section>
+ <section id="view-movies" class="view"><div class="section-heading"><h2>Filmes</h2><span id="movie-count">0 filmes</span></div><div class="toolbar"><input id="movie-search" class="search-input" placeholder="Buscar filme..."><select id="movie-category" class="search-input"><option value="">Todas as categorias</option></select></div><div id="movie-list" class="media-grid empty-state">Seus filmes aparecerão aqui.</div></section>
+ <section id="view-series" class="view"><div class="section-heading"><h2>Séries</h2><span id="series-count">0 séries</span></div><div class="toolbar"><input id="series-search" class="search-input" placeholder="Buscar série..."><select id="series-category" class="search-input"><option value="">Todas as categorias</option></select></div><div id="series-list" class="media-grid empty-state">Suas séries aparecerão aqui.</div></section>
+ <section id="view-favorites" class="view"><div class="section-heading"><h2>Favoritos</h2></div><div id="favorites-list" class="media-grid empty-state">Nenhum favorito ainda.</div></section>
+ <section id="view-history" class="view"><div class="section-heading"><h2>Continuar assistindo</h2></div><div id="history-list" class="media-grid empty-state">Seu histórico está vazio.</div></section>
+ <section id="view-playlists" class="view"><div class="section-heading"><h2>Suas playlists</h2><span>Sincronizadas com sua conta</span></div><div class="toolbar"><button class="primary focusable" id="add-playlist">＋ Adicionar playlist</button><button class="secondary focusable" id="sync-playlists">Sincronizar agora</button></div><div id="playlist-list" class="playlist-list empty-state">Nenhuma playlist adicionada.</div></section>
+ <section id="view-settings" class="view"><div class="section-heading"><h2>Configurações</h2></div><div class="settings-grid">
+  <article class="settings-card"><h3>Perfis</h3><div id="profiles-list"></div><button id="add-profile" class="secondary focusable">Adicionar perfil</button></article>
+  <article class="settings-card"><h3>Controle parental</h3><p>Defina um PIN e oculte conteúdo adulto em perfis infantis.</p><label class="check-row"><input type="checkbox" id="parental-enabled" checked> Ativar bloqueio parental</label><label>PIN parental (4 a 6 números)</label><input id="parental-pin" class="search-input" type="password" maxlength="6" placeholder="Definir ou alterar PIN"><button id="save-parental" class="secondary focusable">Salvar proteção</button></article>
+  <article class="settings-card"><h3>Conta</h3><p id="account-email"></p><button id="sign-out" class="secondary focusable">Sair da conta</button></article>
+ </div></section>
+ <div id="toast" role="status" aria-live="polite"></div>
+</main></div>
+<div id="playlist-modal" class="modal hidden"><div class="modal-card"><h2>Adicionar provedor</h2><form id="playlist-form"><label>Tipo</label><select id="playlist-type" class="search-input"><option value="xtream">Xtream Codes</option><option value="m3u">Lista M3U</option></select><label>Nome</label><input id="playlist-name" required placeholder="Minha lista"><label id="server-label">Servidor (https://host:porta)</label><input id="playlist-server" required placeholder="https://servidor:porta"><div id="xtream-fields"><label>Usuário</label><input id="playlist-user"><label>Senha</label><input id="playlist-pass" type="password"></div><div class="modal-actions"><button type="button" class="secondary" id="cancel-playlist">Cancelar</button><button class="primary">Salvar playlist</button></div></form></div></div>
+<div id="details-modal" class="modal hidden"><div class="modal-card wide"><button class="modal-close" id="close-details">✕</button><div id="details-content"></div></div></div>
+<div id="player-screen" class="player-screen hidden"><div class="player-top"><span id="player-title"></span><span id="player-status">Conectando…</span></div><div class="player-controls"><button id="player-back" class="focusable">Voltar</button><button id="player-pause" class="focusable">Pausar</button><button id="player-rewind" class="focusable">−10s</button><button id="player-forward" class="focusable">+10s</button><span id="player-clock"></span></div></div>
+<script src="app.js"></script>
+</body></html>
