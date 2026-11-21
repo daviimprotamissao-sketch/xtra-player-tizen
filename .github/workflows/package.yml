@@ -1,4 +1,4 @@
-name: Validate xTra Player Tizen
+name: Build xTra Player Tizen
 on:
   push:
     branches: [ main ]
@@ -6,7 +6,7 @@ on:
     branches: [ main ]
   workflow_dispatch:
 jobs:
-  validate:
+  validate-and-package:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,11 +28,17 @@ jobs:
           node --check player.js
       - name: Validate Tizen manifest XML
         run: python3 -c "import xml.etree.ElementTree as ET; ET.parse('config.xml'); print('config.xml OK')"
-      - name: Create source archive (not a signed WGT)
+      - name: Create source archive
         run: |
           mkdir -p dist
           zip -r dist/xtra-player-tizen-source.zip config.xml index.html styles.css app.js firebase.js player.js README.md
+      - name: Create unsigned Tizen WGT package
+        run: |
+          zip -j dist/xtra-player-tizen-unsigned.wgt config.xml index.html styles.css app.js firebase.js player.js
+          unzip -l dist/xtra-player-tizen-unsigned.wgt
       - uses: actions/upload-artifact@v4
         with:
-          name: xtra-player-tizen-source
-          path: dist/xtra-player-tizen-source.zip
+          name: xtra-player-tizen-build
+          path: |
+            dist/xtra-player-tizen-source.zip
+            dist/xtra-player-tizen-unsigned.wgt
