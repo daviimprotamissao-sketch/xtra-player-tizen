@@ -19,7 +19,7 @@ O app usa o projeto Firebase configurado para o xTra Player. Os dados deste clie
 **Atenção:** as credenciais Xtream (servidor, usuário e senha) são armazenadas no nó do próprio usuário para permitir sincronização entre dispositivos. As regras Firebase precisam estar corretamente publicadas; não torne o banco público. Para proteção maior, o ideal é migrar credenciais para um backend com criptografia em repouso.
 
 ## Compatibilidade e limitações
-- O manifesto solicita Tizen 5.5 como versão mínima. Modelos Samsung de 2020/2021 são alvo de compatibilidade, mas cada modelo e firmware precisa ser testado.
+- O manifesto solicita Tizen 5.0 como versão mínima. A Samsung RU7100 (2019) é o alvo inicial de teste; cada modelo e firmware precisa ser validado.
 - O navegador integrado da TV pode bloquear chamadas M3U/Xtream por CORS. Se o provedor não liberar CORS, será necessário um proxy HTTPS controlado pelo proprietário.
 - AVPlay depende de codecs, contêineres, protocolo e firmware suportados pelo aparelho. Nem todo link IPTV será reproduzível.
 - Playlists M3U são classificadas por palavras em nome/grupo. O agrupamento de temporadas/episódios é mais confiável em Xtream Codes.
