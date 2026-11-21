@@ -19,7 +19,7 @@ jobs:
       - name: Copy original Android artwork and fonts
         run: |
           mkdir -p assets
-          cp android-source/app/src/main/res/drawable-nodpi/{banner.png,wallpaper.webp,logo.png,ic_movies.png,ic_play.png,ic_playlist.png,ic_profile.png,ic_refresh.png,ic_series.png,ic_settings.png,ic_tv.png} assets/
+          cp android-source/app/src/main/res/drawable-xhdpi/banner.png assets/\n          cp android-source/app/src/main/res/drawable-nodpi/{wallpaper.webp,logo.png,ic_movies.png,ic_play.png,ic_playlist.png,ic_profile.png,ic_refresh.png,ic_series.png,ic_settings.png,ic_tv.png} assets/
           cp android-source/app/src/main/res/font/sans_regular.ttf assets/
           cp android-source/app/src/main/res/font/sans_bold.ttf assets/
           test -s assets/banner.png && test -s assets/wallpaper.webp && test -s assets/logo.png
