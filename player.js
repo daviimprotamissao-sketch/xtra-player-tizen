@@ -20,7 +20,7 @@
   p.prepareAsync(function(){try{p.play();active=true;window.dispatchEvent(new Event("xtra:playing"));}catch(e){window.dispatchEvent(new CustomEvent("xtra:playererror",{detail:e.message}));}},function(err){window.dispatchEvent(new CustomEvent("xtra:playererror",{detail:String(err)}));});
  }
  function pause(){var p=api();if(!p)return;try{if(state()==="PLAYING")p.pause();else if(state()==="PAUSED")p.play();}catch(e){}}
- function seek(delta){var p=api();if(!p)return;try{p.jumpForward(delta*1000);}catch(e){try{p.jumpBackward(Math.abs(delta)*1000);}catch(x){}}}
+ function seek(delta){var p=api();if(!p)return;try{if(delta>=0)p.jumpForward(delta*1000);else p.jumpBackward(Math.abs(delta)*1000);}catch(e){}}
  function duration(){try{return api().getDuration();}catch(e){return 0;}}
  function current(){try{return api().getCurrentTime();}catch(e){return 0;}}
  window.XtraPlayerEngine={open:open,close:close,pause:pause,seek:seek,state:state,duration:duration,current:current,isActive:function(){return active;}};
