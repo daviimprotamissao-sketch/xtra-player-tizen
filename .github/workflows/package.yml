@@ -10,32 +10,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout Android source assets
+        uses: actions/checkout@v4
         with:
-          node-version: 20
-      - name: Validate required files
+          repository: daviimprotamissao-sketch/succotash
+          ref: main
+          path: android-source
+      - name: Copy original Android artwork and fonts
         run: |
-          test -f config.xml
-          test -f index.html
-          test -f styles.css
-          test -f app.js
-          test -f firebase.js
-          test -f player.js
-      - name: Validate JavaScript syntax
+          mkdir -p assets
+          cp android-source/app/src/main/res/drawable-nodpi/{banner.png,wallpaper.webp,logo.png,ic_movies.png,ic_play.png,ic_playlist.png,ic_profile.png,ic_refresh.png,ic_series.png,ic_settings.png,ic_tv.png} assets/
+          cp android-source/app/src/main/res/font/sans_regular.ttf assets/
+          cp android-source/app/src/main/res/font/sans_bold.ttf assets/
+          test -s assets/banner.png && test -s assets/wallpaper.webp && test -s assets/logo.png
+      - name: Validate and package
         run: |
-          node --check app.js
-          node --check firebase.js
-          node --check player.js
-      - name: Validate Tizen manifest XML
-        run: python3 -c "import xml.etree.ElementTree as ET; ET.parse('config.xml'); print('config.xml OK')"
-      - name: Create source archive
-        run: |
+          test -f config.xml && test -f index.html && test -f styles.css && test -f app.js && test -f firebase.js && test -f player.js
+          node --check app.js && node --check firebase.js && node --check player.js
+          python3 -c "import xml.etree.ElementTree as ET; ET.parse('config.xml')"
           mkdir -p dist
-          zip -r dist/xtra-player-tizen-source.zip config.xml index.html styles.css app.js firebase.js player.js README.md
-      - name: Create unsigned Tizen WGT package
-        run: |
-          zip -j dist/xtra-player-tizen-unsigned.wgt config.xml index.html styles.css app.js firebase.js player.js
-          unzip -l dist/xtra-player-tizen-unsigned.wgt
+          zip -r dist/xtra-player-tizen-source.zip config.xml index.html styles.css app.js firebase.js player.js assets
+          zip -r dist/xtra-player-tizen-unsigned.wgt config.xml index.html styles.css app.js firebase.js player.js assets
       - uses: actions/upload-artifact@v4
         with:
           name: xtra-player-tizen-build
