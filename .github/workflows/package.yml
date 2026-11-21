@@ -1,0 +1,28 @@
+name: Validate Tizen app
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate required project files
+        run: |
+          test -f config.xml
+          test -f index.html
+          test -f styles.css
+          test -f app.js
+      - name: Check JavaScript syntax
+        run: node --check app.js
+      - name: Create source package (not a signed WGT)
+        run: |
+          mkdir -p dist
+          zip -r dist/xtra-player-tizen-source.zip config.xml index.html styles.css app.js README.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xtra-player-tizen-source
+          path: dist/xtra-player-tizen-source.zip
